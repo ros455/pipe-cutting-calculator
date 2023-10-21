@@ -1,0 +1,13 @@
+@import './GlobalTemplate.scss';
+
+.maim_page_wrap {
+
+}
+
+.top_inputs_wrap {
+
+}
+
+.custom_input {
+    @extend %input;
+}
