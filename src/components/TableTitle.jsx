@@ -10,7 +10,7 @@ const TableTitle = () => {
             <p>Количество на 1 шт</p>
         </div>
         <div className='table_title_block'>
-            <p>Длина</p>
+            <p>Длина мм</p>
         </div>
         <div className='table_title_block'>
             <p>Название</p>

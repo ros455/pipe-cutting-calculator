@@ -1,10 +1,30 @@
-import React from "react";
+import React, {useEffect} from "react";
 
-const TableData = ({ quantity, length, name, setRows, index }) => {
+const TableData = ({ quantity, length, name, quantitySum, id, setRows, index, numbersPipe, errorLength, setValidationRows, validationRows }) => {
+
+  useEffect(() => {
+    if(errorLength) {
+      let copyValidationRows = [...validationRows];
+      let currentBlock = {isError: errorLength, idx: index};
+      copyValidationRows.push(currentBlock);
+      setValidationRows(copyValidationRows);
+    }
+  },[errorLength])
+
+
+  const handleSetQuantity = (e) => {
+    setRows((prevBlocks) =>
+              prevBlocks.map((prev, idx) =>
+                idx === index ? { ...prev, quantity: Number(e.target.value), quantitySum: Number(e.target.value) *  numbersPipe} : prev
+              )
+            )
+  }
+
+
   return (
     <>
       <div className="table_data_block">
-        <p>1</p>
+        <p>{id}</p>
       </div>
       <div className="table_data_block">
         <input
@@ -12,13 +32,7 @@ const TableData = ({ quantity, length, name, setRows, index }) => {
           className="custom_input"
           type="number"
           value={quantity}
-          onChange={(e) =>
-            setRows((prevBlocks) =>
-              prevBlocks.map((prev, idx) =>
-                idx === index ? { ...prev, quantity: e.target.value } : prev
-              )
-            )
-          }
+          onChange={(e) => handleSetQuantity(e)}
         />
       </div>
       <div className="table_data_block">
@@ -26,13 +40,11 @@ const TableData = ({ quantity, length, name, setRows, index }) => {
         className="custom_input" 
         type="number"
         value={length}
-        onChange={(e) =>
-            setRows((prevBlocks) =>
-              prevBlocks.map((prev, idx) =>
-                idx === index ? { ...prev, length: e.target.value } : prev
-              )
-            )
-          }/>
+        onChange={(e) => setRows((prevBlocks) =>
+          prevBlocks.map((prev, idx) =>
+            idx === index ? { ...prev, length: Number(e.target.value) } : prev
+          )
+        )}/>
       </div>
       <div className="table_data_block">
         <input placeholder="Название" 
@@ -47,7 +59,7 @@ const TableData = ({ quantity, length, name, setRows, index }) => {
           } />
       </div>
       <div className="table_data_block">
-        <p>14</p>
+        <p>{quantitySum}</p>
       </div>
     </>
   );
