@@ -11,3 +11,15 @@
 .custom_input {
     @extend %input;
 }
+
+.display_program_pipe_cutting_wrap {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.display_program_pipe_cutting_block {
+    display: flex;
+    justify-content: center;
+    background: rgb(223, 223, 223);
+    margin: 10px 0px
+}

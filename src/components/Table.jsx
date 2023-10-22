@@ -20,7 +20,7 @@ const Table = ({pipe, numbersPipe, rows, setRows}) => {
       const newBlock = {id: idx + 1, quantity: item.quantity, length: item.length, name: item.name, quantitySum: item.quantitySum};
       newArray.push(newBlock);
     })
-    console.log('filteredArray',filteredArray);
+
     setRows(newArray);
   };
 

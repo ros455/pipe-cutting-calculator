@@ -3,6 +3,7 @@ import '../styles/Main.scss';
 import Table from './Table';
 import Miscalculations from './Miscalculations';
 const MainPage = () => {
+    const [combinations, setCombinations] = useState([]);
     const [pipe, setPipe] = useState(6000);
     const [numbersPipe, setNumbersPipe] = useState(0);
 //     const [rows, setRows] = useState([
@@ -12,8 +13,12 @@ const MainPage = () => {
 // {id: 4, quantity: 4, length: 220, name: '', quantitySum: 16},
 // {id: 5, quantity: 2, length: 350, name: '', quantitySum: 8}
 //     ]);
-    const [rows, setRows] = useState([{ id: 1, quantity: 0, length: 0, name: "", quantitySum: 0 }]);
-    console.log('rows',rows);
+    const [rows, setRows] = useState([
+{id: 1, quantity: 4, length: 1200, name: '', quantitySum: 16},
+{id: 2, quantity: 8, length: 900, name: '', quantitySum: 32},
+    ]);
+    // const [rows, setRows] = useState([{ id: 1, quantity: 0, length: 0, name: "", quantitySum: 0 }]);
+
     return (
         <div className='maim_page_wrap'>
             <div className='top_inputs_wrap'>
@@ -40,6 +45,8 @@ const MainPage = () => {
             setRows={setRows}
             rows={rows}/>
             <Miscalculations
+            combinations={combinations}
+            setCombinations={setCombinations}
             pipe={pipe}
             numbersPipe={numbersPipe}
             rows={rows}/>
