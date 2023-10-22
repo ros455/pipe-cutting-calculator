@@ -8,7 +8,7 @@ const Miscalculations = ({
   combinations,
   setCombinations,
 }) => {
-  const [stateFinalyArray, setStateFinalyArray] = useState([]);
+  // const [stateFinalyArray, setStateFinalyArray] = useState([]);
   const [allCalculatePipeArray, setAllCalculatePipeArray] = useState([]);
 
   useEffect(() => {
@@ -58,6 +58,27 @@ const Miscalculations = ({
     });
 
     let remainingRows = rowsState.filter((r) => r.quantitySum > 0);
+    // Як що залишилась позиція яка немає з чим поєднатися та не проходить по умові
+    remainingRows.forEach((remaining, index) => {
+      if (remaining.length > 700 && remaining.length < 999) {
+        // Якщо ми можемо розбити елемент на частини по 1800 мм
+        if (remaining.length * 2 <= 1800) {
+          const numberOfCombinations = Math.floor(remaining.quantitySum / 2);
+          if (numberOfCombinations > 0) {
+            resultCombinations.push({
+              pos1: remaining.id,
+              pos2: remaining.id,
+              quantity: numberOfCombinations,
+              totalLength: remaining.length * 2,
+              name: remaining.name,
+              name2: remaining.name,
+            });
+            remaining.quantitySum -= numberOfCombinations * 2;
+          }
+        }
+      }
+    });
+    console.log('remainingRows',remainingRows);
     for (let remaining of remainingRows) {
 
       if (remaining.length >= 700 && remaining.length <= 999) {
@@ -161,7 +182,7 @@ const Miscalculations = ({
 
     console.log('finalArrayReverse',finalArrayReverse);
 
-    setStateFinalyArray(finalArrayReverse);
+    // setStateFinalyArray(finalArrayReverse);
     setAllCalculatePipeArray(groupedObjects);
   };
 
