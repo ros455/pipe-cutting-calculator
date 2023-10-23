@@ -6,8 +6,6 @@ import TableData from "./TableData";
 const Table = ({pipe, numbersPipe, rows, setRows, combinations}) => {
   const [validationRows, setValidationRows] = useState([])
 
-  console.log('combinations',combinations);
-
   const handleAddRow = () => {
     setRows((prevBlocks) => [
       ...prevBlocks,

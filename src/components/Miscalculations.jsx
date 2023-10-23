@@ -11,12 +11,14 @@ const Miscalculations = ({
   const [allCalculatePipeArray, setAllCalculatePipeArray] = useState([]);
 
   useEffect(() => {
+    // створюємо массив з проблемних рядків 
     const problematicRows = rows.filter(
       (row) => row.length >= 700 && row.length <= 999
     );
+    console.log('problematicRows',problematicRows);
     let resultCombinations = [];
 
-    // Створюємо стан для кожного рядка для відстеження поточного quantitySum
+    // Створюємо стан (глибоку копію) для кожного рядка для відстеження поточного quantitySum
     let rowsState = rows.map((row) => ({ ...row }));
 
     problematicRows.forEach((problematicRow) => {
@@ -25,9 +27,12 @@ const Miscalculations = ({
       );
 
       rows.forEach((possibleRow) => {
+
+        // Обираємо окремий обєкт в массиві
         let currentPossibleRowState = rowsState.find(
           (r) => r.id === possibleRow.id
         );
+        console.log('currentPossibleRowState',currentPossibleRowState);
 
         while (
           currentProblematicRowState.quantitySum > 0 &&
@@ -36,10 +41,12 @@ const Miscalculations = ({
             999 &&
           currentPossibleRowState.quantitySum > 0
         ) {
+          // Знаходимо мінімальне число
           let amountToSubtract = Math.min(
             currentProblematicRowState.quantitySum,
             currentPossibleRowState.quantitySum
           );
+          // Пушимо в массив ймовірні комбінації
           resultCombinations.push({
             pos1: currentProblematicRowState.id,
             pos2: currentPossibleRowState.id,
@@ -50,6 +57,7 @@ const Miscalculations = ({
             name: currentProblematicRowState.name,
             name2: currentPossibleRowState.name,
           });
+
           currentProblematicRowState.quantitySum -= amountToSubtract;
           currentPossibleRowState.quantitySum -= amountToSubtract;
         }
@@ -78,15 +86,20 @@ const Miscalculations = ({
       }
     });
 
+    console.log('remainingRows',remainingRows);
+    //remainingRows це массив з проблемними рядками
     for (let remaining of remainingRows) {
-
+      //Перевіряємо чи рядок є проблемним
       if (remaining.length >= 700 && remaining.length <= 999) {
+        console.log('rowsState',rowsState);
+        console.log('remaining',remaining);
         let potentialPartner = rowsState.find(
           (r) =>
             r.length + remaining.length > 999 &&
             r.quantitySum > 0 &&
             r.id !== remaining.id
         );
+        console.log('potentialPartner',potentialPartner);
         if (potentialPartner) {
           resultCombinations.push({
             pos1: remaining.id,
@@ -118,8 +131,12 @@ const Miscalculations = ({
       }
     }
 
+    console.log('resultCombinations',resultCombinations);
+
+    //Присваюємо комбіновані рядки в стан
     setCombinations(resultCombinations);
-    calculatePipeCutting(resultCombinations, resultCombinations);
+
+    calculatePipeCutting(resultCombinations);
   }, [rows]);
 
   function adjustValuesByCount(obj) {
@@ -146,7 +163,7 @@ const Miscalculations = ({
     }
   }
 
-  const calculatePipeCutting = (arr, combination) => {
+  const calculatePipeCutting = (arr) => {
     const lengthPipe = pipe - 350;
     let currentLengthPipe = 0;
     let currentPipeParts = [];
@@ -154,7 +171,7 @@ const Miscalculations = ({
 
     const deepCopy = (arr) => arr.map((item) => ({ ...item }));
     let copyArr = deepCopy(arr);
-
+    //Цикл буде працювати поки в массиві copyArr не залишиться quantity > 0
     while (copyArr.some((item) => item.quantity > 0)) {
       for (let position of copyArr) {
         while (
@@ -166,6 +183,7 @@ const Miscalculations = ({
 
           // Додаємо частину до поточного масиву частин труби
           const partLabel = `${position.totalLength} х 1`;
+          console.log('partLabel',partLabel);
           const foundIndex = currentPipeParts.findIndex((part) =>
             part.startsWith(`${position.totalLength} х`)
           );
@@ -178,13 +196,14 @@ const Miscalculations = ({
           }
         }
       }
-
+      console.log('currentPipeParts',currentPipeParts);
       finalArray.push([...currentPipeParts]);
       currentPipeParts = [];
       currentLengthPipe = 0;
     }
-
+    console.log('finalArray',finalArray);
     const finalArrayReverse = finalArray.map((item) => item.reverse());
+
 
     const groupedObjects = [];
 
@@ -206,11 +225,11 @@ const Miscalculations = ({
     const mergedArray = adjustedGroupedObjects.map(obj => {
       const values = obj.value.split(', ').map(valueItem => {
         const [length, multiplication] = valueItem.split(' х ');
-        return `${getPositionsForLength(parseInt(length, 10), combination)}: ${valueItem}`;
+        return `${getPositionsForLength(parseInt(length, 10), arr)}: ${valueItem}`;
       });
       return {
         count: obj.count,
-        value: values.join(', ')
+        value: values.join(' | ')
       };
     });
 
@@ -231,10 +250,10 @@ const Miscalculations = ({
       <div className="display_program_pipe_cutting_wrap">
       {allCalculatePipeArray.map((item, idx) => (
         <div className="display_program_pipe_cutting_block" key={idx}>
-          <p>
+          <p className="display_program_pipe_cutting_text_title">
             Программа {idx + 1}: {item.count} труб
           </p>
-          <p> {item.value}</p>
+          <p className="display_program_pipe_cutting_text_value"> {item.value}</p>
         </div>
       ))}
       </div>

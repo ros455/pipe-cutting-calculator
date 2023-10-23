@@ -16,17 +16,31 @@ gap: 20px;
 
 .display_program_pipe_cutting_wrap {
     display: flex;
-    justify-content: center;
+    // justify-content: center;
     flex-direction: column;
+    margin-top: 5px;
 }
 .display_program_pipe_cutting_block {
     display: flex;
-    justify-content: center;
-    background: rgb(223, 223, 223);
-    margin: 2px 0px;
+    // justify-content: center;
+    background: rgb(245, 245, 245);
+    margin: 0px;
+    border-bottom: 1px solid black;
     p {
-        margin: 2px 10px;
+        font-weight: 600;
+        margin: 0px 10px;
+        // width: 50%;
     }
+}
+
+.display_program_pipe_cutting_text_title {
+    width: 40%;
+    text-align: end;
+}
+
+.display_program_pipe_cutting_text_value {
+    width: 60%;
+    text-align: start;
 }
 
 .combination {
