@@ -3,13 +3,15 @@ import "../styles/Tables.scss";
 import TableTitle from "./TableTitle";
 import TableData from "./TableData";
 
-const Table = ({pipe, numbersPipe, rows, setRows}) => {
+const Table = ({pipe, numbersPipe, rows, setRows, combinations}) => {
   const [validationRows, setValidationRows] = useState([])
+
+  console.log('combinations',combinations);
 
   const handleAddRow = () => {
     setRows((prevBlocks) => [
       ...prevBlocks,
-      { id: rows.length + 1, quantity: 0, length: 0, name: "", quantitySum: 0  },
+      { id: rows.length + 1, quantity: 0, length: 0, name: "", quantitySum: 0 },
     ]);
   };
 
@@ -29,7 +31,7 @@ const Table = ({pipe, numbersPipe, rows, setRows}) => {
       <div className="table">
         <TableTitle />
         {rows.map((row, index) => (
-          <div className={`table_data_wrap ${(row.length >= 700 && row.length <= 999) ? 'danger' : '' }`} key={index}>
+          <div className={`table_data_wrap ${(row.length >= 700 && row.length <= 999) ? 'danger' : combinations.some((item) => item.pos2 == row.id) ? 'combination' : '' }`} key={index}>
             {index != 0 &&
             <div 
             className="remove_button"

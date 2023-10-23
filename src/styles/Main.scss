@@ -5,7 +5,9 @@
 }
 
 .top_inputs_wrap {
-
+display: flex;
+justify-content: center;
+gap: 20px;
 }
 
 .custom_input {
@@ -21,5 +23,12 @@
     display: flex;
     justify-content: center;
     background: rgb(223, 223, 223);
-    margin: 10px 0px
+    margin: 2px 0px;
+    p {
+        margin: 2px 10px;
+    }
+}
+
+.combination {
+    background-color: rgb(151, 151, 255);
 }

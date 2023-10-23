@@ -18,7 +18,7 @@ const MainPage = () => {
 // {id: 2, quantity: 8, length: 900, name: '', quantitySum: 32},
 //     ]);
     const [rows, setRows] = useState([{ id: 1, quantity: 0, length: 0, name: "", quantitySum: 0 }]);
-
+    console.log('combinations',combinations);
     return (
         <div className='maim_page_wrap'>
             <div className='top_inputs_wrap'>
@@ -40,6 +40,7 @@ const MainPage = () => {
                 </div>
             </div>
             <Table 
+            combinations={combinations}
             pipe={pipe}
             numbersPipe={numbersPipe}
             setRows={setRows}

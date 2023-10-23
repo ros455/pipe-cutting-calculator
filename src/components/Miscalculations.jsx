@@ -8,7 +8,6 @@ const Miscalculations = ({
   combinations,
   setCombinations,
 }) => {
-  // const [stateFinalyArray, setStateFinalyArray] = useState([]);
   const [allCalculatePipeArray, setAllCalculatePipeArray] = useState([]);
 
   useEffect(() => {
@@ -78,7 +77,7 @@ const Miscalculations = ({
         }
       }
     });
-    console.log('remainingRows',remainingRows);
+
     for (let remaining of remainingRows) {
 
       if (remaining.length >= 700 && remaining.length <= 999) {
@@ -120,10 +119,34 @@ const Miscalculations = ({
     }
 
     setCombinations(resultCombinations);
-    calculatePipeCutting(resultCombinations);
+    calculatePipeCutting(resultCombinations, resultCombinations);
   }, [rows]);
 
-  const calculatePipeCutting = (arr) => {
+  function adjustValuesByCount(obj) {
+    const values = obj.value.split(", ");
+    const adjustedValues = values.map(pair => {
+      const [number, multiplication] = pair.split(" х ");
+      const result = parseInt(multiplication, 10) * obj.count;
+      return `${number} х ${result}`;
+    });
+    return {
+      count: obj.count,
+      value: adjustedValues.join(", ")
+    };
+  }
+
+  function getPositionsForLength(length, combination) {
+    const item = combination.find(comb => comb.totalLength == length);
+    if (!item) return '';
+    
+    if (item.pos2) {
+      return `Pos ${item.pos1} + Pos ${item.pos2}`;
+    } else {
+      return `Pos ${item.pos1}`;
+    }
+  }
+
+  const calculatePipeCutting = (arr, combination) => {
     const lengthPipe = pipe - 350;
     let currentLengthPipe = 0;
     let currentPipeParts = [];
@@ -131,8 +154,6 @@ const Miscalculations = ({
 
     const deepCopy = (arr) => arr.map((item) => ({ ...item }));
     let copyArr = deepCopy(arr);
-
-    console.log('copyArr',copyArr);
 
     while (copyArr.some((item) => item.quantity > 0)) {
       for (let position of copyArr) {
@@ -180,10 +201,20 @@ const Miscalculations = ({
       }
     }
 
-    console.log('finalArrayReverse',finalArrayReverse);
+    const adjustedGroupedObjects = groupedObjects.map(adjustValuesByCount);
 
-    // setStateFinalyArray(finalArrayReverse);
-    setAllCalculatePipeArray(groupedObjects);
+    const mergedArray = adjustedGroupedObjects.map(obj => {
+      const values = obj.value.split(', ').map(valueItem => {
+        const [length, multiplication] = valueItem.split(' х ');
+        return `${getPositionsForLength(parseInt(length, 10), combination)}: ${valueItem}`;
+      });
+      return {
+        count: obj.count,
+        value: values.join(', ')
+      };
+    });
+
+    setAllCalculatePipeArray(mergedArray);
   };
 
   return (
@@ -200,10 +231,10 @@ const Miscalculations = ({
       <div className="display_program_pipe_cutting_wrap">
       {allCalculatePipeArray.map((item, idx) => (
         <div className="display_program_pipe_cutting_block" key={idx}>
-          <p style={{ padding: "0px 10px" }}>
+          <p>
             Программа {idx + 1}: {item.count} труб
           </p>
-          <p style={{ padding: "0px 10px" }}>Размер: {item.value}</p>
+          <p> {item.value}</p>
         </div>
       ))}
       </div>
