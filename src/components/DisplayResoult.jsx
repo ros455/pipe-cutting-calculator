@@ -13,10 +13,8 @@ const DisplayResoult = ({programmResoult, combinationResoult}) => {
   //     setCombinationState(parsedCombinations);
   //     setAllCalculatePipeState(parsedAllCalculatePipe);
   //   }
-  // }, []);
+  // }, [programmResoult, combinationResoult]);
 
-  // console.log('combinationState',combinationState);
-  // console.log('allCalculatePipeState',allCalculatePipeState);
     return (
         <div>
         {!!combinationResoult.length && combinationResoult.map((combination, idx) => (

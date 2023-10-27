@@ -3,7 +3,7 @@ import "../styles/Tables.scss";
 import TableTitle from "./TableTitle";
 import TableData from "./TableData";
 
-const Table = ({pipe, numbersPipe, rows, setRows, combinations, handleShowResoult}) => {
+const Table = ({pipe, numbersPipe, rows, setRows, combinations, handleShowResoult, secondRows, setNumbersPipe}) => {
   const [validationRows, setValidationRows] = useState([]);
 
   const handleAddRow = () => {
@@ -11,6 +11,7 @@ const Table = ({pipe, numbersPipe, rows, setRows, combinations, handleShowResoul
       ...prevBlocks,
       { id: rows.length + 1, quantity: 0, length: 0, name: "", quantitySum: 0 },
     ]);
+    window.localStorage.setItem('rows', JSON.stringify(rows));
   };
 
   const handleRemoveRow = (index) => {
@@ -23,6 +24,23 @@ const Table = ({pipe, numbersPipe, rows, setRows, combinations, handleShowResoul
 
     setRows(newArray);
   };
+
+  const handleRestoreArray = () => {
+    if(secondRows.length) {
+      setRows(secondRows);
+      const num = window.localStorage.getItem('numbersPipe');
+      setNumbersPipe(num);
+    } else {
+      alert('Кеш пуст')
+    }
+  }
+
+  const handleClearStorege = () => {
+    window.localStorage.removeItem('rows');
+    window.localStorage.removeItem('numbersPipe');
+    window.location.reload();
+    // window.localStorage.setItem('rows', JSON.stringify({ id: 1, quantity: 0, length: 0, name: "", quantitySum: 0 }))
+  }
 
   return (
     <div className="table_wrap">
@@ -56,6 +74,12 @@ const Table = ({pipe, numbersPipe, rows, setRows, combinations, handleShowResoul
           </button>
           <button className="button_add_new_line_item" onClick={() => handleShowResoult()}>
           Рассчитать
+          </button>
+          <button className="button_add_new_line_item" onClick={() => handleRestoreArray()}>
+          Востановить
+          </button>
+          <button className="button_add_new_line_item" onClick={() => handleClearStorege()}>
+          Очистить кеш
           </button>
         </div>
       </div>

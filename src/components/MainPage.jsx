@@ -7,25 +7,25 @@ const MainPage = () => {
     const [combinations, setCombinations] = useState([]);
     const [pipe, setPipe] = useState(6000);
     const [numbersPipe, setNumbersPipe] = useState(0);
-//     const [rows, setRows] = useState([
-// {id: 1, quantity: 10, length: 1200, name: '', quantitySum: 40},
-// {id: 2, quantity: 8, length: 750, name: '', quantitySum: 32},
-// {id: 3, quantity: 5, length: 930, name: '', quantitySum: 20},
-// {id: 4, quantity: 4, length: 220, name: '', quantitySum: 16},
-// {id: 5, quantity: 2, length: 350, name: '', quantitySum: 8}
-//     ]);
-//     const [rows, setRows] = useState([
-// {id: 1, quantity: 4, length: 1200, name: '', quantitySum: 16},
-// {id: 2, quantity: 8, length: 900, name: '', quantitySum: 32},
-//     ]);
     const [rows, setRows] = useState([{ id: 1, quantity: 0, length: 0, name: "", quantitySum: 0 }]);
+    const [secondRows, setSecondRows] = useState([]);
     const [programmResoult, setProgrammResoult] = useState([]);
     const [combinationResoult, setCombinationResoult] = useState([]);
     const [allCalculatePipeArray, setAllCalculatePipeArray] = useState([]);
 
+    useEffect(() => {
+        const rows = window.localStorage.getItem('rows');
+        if(rows){
+            const newRows = JSON.parse(rows);
+            console.log('newRows',newRows);
+            setSecondRows(newRows);
+        }
+    },[rows])
+
     const handleShowResoult = () => {
         setCombinationResoult(combinations);
         setProgrammResoult(allCalculatePipeArray);
+        window.localStorage.setItem('rows', JSON.stringify(rows));
         // window.localStorage.setItem('combinations', JSON.stringify(combinations));
         // window.localStorage.setItem('allCalculatePipe', JSON.stringify(allCalculatePipeArray));
       }
@@ -38,6 +38,11 @@ const MainPage = () => {
       });
     setRows(newRows)
   },[numbersPipe])
+
+  const handleNumbersPipeSet = (e) => {
+    setNumbersPipe(e);
+    window.localStorage.setItem('numbersPipe',e)
+  }
 
     return (
         <div className='maim_page_wrap'>
@@ -56,10 +61,12 @@ const MainPage = () => {
                     className='custom_input'
                     type='number'
                     value={numbersPipe}
-                    onChange={(e) => setNumbersPipe(e.target.value)}/>
+                    onChange={(e) => handleNumbersPipeSet(e.target.value)}/>
                 </div>
             </div>
             <Table 
+            setNumbersPipe={setNumbersPipe}
+            secondRows={secondRows}
             combinations={combinations}
             pipe={pipe}
             numbersPipe={numbersPipe}

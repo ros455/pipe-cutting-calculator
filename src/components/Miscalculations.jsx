@@ -322,7 +322,6 @@ const Miscalculations = ({
             currentProblematicRowState.quantitySum,
             currentPossibleRowState.quantitySum
           );
-          console.log('work1');
           resultCombinations.push({
             pos1: currentProblematicRowState.id,
             pos2: currentPossibleRowState.id,
@@ -347,7 +346,6 @@ const Miscalculations = ({
         if (remaining.length * 2 <= 1800) {
           const numberOfCombinations = Math.floor(remaining.quantitySum / 2);
           if (numberOfCombinations > 0) {
-            console.log('work2');
             resultCombinations.push({
               pos1: remaining.id,
               pos2: remaining.id,
@@ -372,7 +370,6 @@ const Miscalculations = ({
             r.id !== remaining.id
         );
         if (potentialPartner) {
-          console.log('work3');
           resultCombinations.push({
             pos1: remaining.id,
             pos2: potentialPartner.id,
@@ -392,7 +389,6 @@ const Miscalculations = ({
           potentialPartner.quantitySum -= minQuantitySum;
         }
       } else {
-        console.log('work4');
         resultCombinations.push({
           pos1: remaining.id,
           pos2: null, // Для визначення, що комбінація відсутня
@@ -481,7 +477,6 @@ const Miscalculations = ({
             const count = Number(parts[1]) + 1;
             currentPipeParts[foundIndex] = `${position.totalLength} х ${count}`;
           } else {
-            console.log('work5');
             currentPipeParts.push(partLabel);
           }
         }
@@ -491,7 +486,6 @@ const Miscalculations = ({
         break; // Вихід із зовнішнього циклу, якщо не вдалося обробити жодної позиції
       }
       
-      console.log('work6');
       finalArray.push([...currentPipeParts]);
       currentPipeParts = [];
       currentLengthPipe = 0;
@@ -512,7 +506,6 @@ const Miscalculations = ({
       if (index > -1) {
         groupedObjects[index].count++;
       } else {
-        console.log('work7');
         groupedObjects.push({ count: 1, value: arr.join(", ") });
       }
     }
