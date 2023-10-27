@@ -3,8 +3,8 @@ import "../styles/Tables.scss";
 import TableTitle from "./TableTitle";
 import TableData from "./TableData";
 
-const Table = ({pipe, numbersPipe, rows, setRows, combinations}) => {
-  const [validationRows, setValidationRows] = useState([])
+const Table = ({pipe, numbersPipe, rows, setRows, combinations, handleShowResoult}) => {
+  const [validationRows, setValidationRows] = useState([]);
 
   const handleAddRow = () => {
     setRows((prevBlocks) => [
@@ -53,6 +53,9 @@ const Table = ({pipe, numbersPipe, rows, setRows, combinations}) => {
         <div className="button_add_new_line_wrap">
           <button className="button_add_new_line_item" onClick={handleAddRow}>
             +
+          </button>
+          <button className="button_add_new_line_item" onClick={() => handleShowResoult()}>
+          Рассчитать
           </button>
         </div>
       </div>

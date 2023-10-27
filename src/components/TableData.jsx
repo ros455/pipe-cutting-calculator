@@ -22,6 +22,7 @@ const TableData = ({
     }
   }, [errorLength]);
 
+
   const handleSetQuantity = (e) => {
     setRows((prevBlocks) =>
       prevBlocks.map((prev, idx) =>

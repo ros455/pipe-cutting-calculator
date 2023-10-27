@@ -285,9 +285,12 @@ const Miscalculations = ({
   rows,
   combinations,
   setCombinations,
+  handleShowResoult,
+  allCalculatePipeArray, 
+  setAllCalculatePipeArray
 }) => {
   // const [stateFinalyArray, setStateFinalyArray] = useState([]);
-  const [allCalculatePipeArray, setAllCalculatePipeArray] = useState([]);
+
 
   useEffect(() => {
     const problematicRows = rows.filter(
@@ -319,6 +322,7 @@ const Miscalculations = ({
             currentProblematicRowState.quantitySum,
             currentPossibleRowState.quantitySum
           );
+          console.log('work1');
           resultCombinations.push({
             pos1: currentProblematicRowState.id,
             pos2: currentPossibleRowState.id,
@@ -343,6 +347,7 @@ const Miscalculations = ({
         if (remaining.length * 2 <= 1800) {
           const numberOfCombinations = Math.floor(remaining.quantitySum / 2);
           if (numberOfCombinations > 0) {
+            console.log('work2');
             resultCombinations.push({
               pos1: remaining.id,
               pos2: remaining.id,
@@ -356,7 +361,7 @@ const Miscalculations = ({
         }
       }
     });
-    console.log('remainingRows',remainingRows);
+
     for (let remaining of remainingRows) {
 
       if (remaining.length >= 700 && remaining.length <= 999) {
@@ -367,6 +372,7 @@ const Miscalculations = ({
             r.id !== remaining.id
         );
         if (potentialPartner) {
+          console.log('work3');
           resultCombinations.push({
             pos1: remaining.id,
             pos2: potentialPartner.id,
@@ -386,6 +392,7 @@ const Miscalculations = ({
           potentialPartner.quantitySum -= minQuantitySum;
         }
       } else {
+        console.log('work4');
         resultCombinations.push({
           pos1: remaining.id,
           pos2: null, // Для визначення, що комбінація відсутня
@@ -422,7 +429,37 @@ const Miscalculations = ({
     const deepCopy = (arr) => arr.map((item) => ({ ...item }));
     let copyArr = deepCopy(arr);
 
-    console.log('copyArr',copyArr);
+    // while (copyArr.some((item) => item.quantity > 0)) {
+    //   for (let position of copyArr) {
+    //     while (
+    //       position.totalLength + currentLengthPipe <= lengthPipe &&
+    //       position.quantity > 0
+    //     ) {
+    //       currentLengthPipe += position.totalLength;
+    //       position.quantity--;
+
+    //       // Додаємо частину до поточного масиву частин труби
+    //       const partLabel = `${position.totalLength} х 1`;
+    //       const foundIndex = currentPipeParts.findIndex((part) =>
+    //         part.startsWith(`${position.totalLength} х`)
+    //       );
+    //       if (foundIndex !== -1) {
+    //         const parts = currentPipeParts[foundIndex].split(" х ");
+    //         const count = Number(parts[1]) + 1;
+    //         currentPipeParts[foundIndex] = `${position.totalLength} х ${count}`;
+    //       } else {
+    //         console.log('work5');
+    //         currentPipeParts.push(partLabel);
+    //       }
+    //     }
+    //   }
+    //   console.log('work6');
+    //   finalArray.push([...currentPipeParts]);
+    //   currentPipeParts = [];
+    //   currentLengthPipe = 0;
+    // }
+
+    let isAnyPositionProcessed = false;
 
     while (copyArr.some((item) => item.quantity > 0)) {
       for (let position of copyArr) {
@@ -430,9 +467,10 @@ const Miscalculations = ({
           position.totalLength + currentLengthPipe <= lengthPipe &&
           position.quantity > 0
         ) {
+          isAnyPositionProcessed = true;
           currentLengthPipe += position.totalLength;
           position.quantity--;
-
+    
           // Додаємо частину до поточного масиву частин труби
           const partLabel = `${position.totalLength} х 1`;
           const foundIndex = currentPipeParts.findIndex((part) =>
@@ -443,15 +481,23 @@ const Miscalculations = ({
             const count = Number(parts[1]) + 1;
             currentPipeParts[foundIndex] = `${position.totalLength} х ${count}`;
           } else {
+            console.log('work5');
             currentPipeParts.push(partLabel);
           }
         }
       }
-
+      
+      if (!isAnyPositionProcessed) {
+        break; // Вихід із зовнішнього циклу, якщо не вдалося обробити жодної позиції
+      }
+      
+      console.log('work6');
       finalArray.push([...currentPipeParts]);
       currentPipeParts = [];
       currentLengthPipe = 0;
+      isAnyPositionProcessed = false; // Скидання прапорця для наступної ітерації
     }
+    
 
     const finalArrayReverse = finalArray.map((item) => item.reverse());
 
@@ -466,11 +512,10 @@ const Miscalculations = ({
       if (index > -1) {
         groupedObjects[index].count++;
       } else {
+        console.log('work7');
         groupedObjects.push({ count: 1, value: arr.join(", ") });
       }
     }
-
-    console.log('groupedObjects',groupedObjects);
 
     const mergedArray = groupedObjects.map(obj => {
       const values = obj.value.split(', ').map(valueItem => {
@@ -483,38 +528,12 @@ const Miscalculations = ({
       };
     });
 
-    console.log('mergedArray',mergedArray);
-
     // setStateFinalyArray(finalArrayReverse);
     setAllCalculatePipeArray(mergedArray);
   };
 
   return (
     <div>
-      {combinations.map((combination, idx) => (
-        <div key={idx}>
-          {combination.pos2
-            ? `Pos ${combination.pos1} - (${combination.name}) + Pos ${combination.pos2} - (${combination.name2})`
-            : `Pos ${combination.pos1} - (${combination.name})`}{" "}
-          - ({combination.quantity} шт по {combination.totalLength} мм)
-        </div>
-      ))}
-
-      <div className="display_program_pipe_cutting_wrap">
-      {allCalculatePipeArray.map((item, idx) => (
-        <div className="display_program_pipe_cutting_block" key={idx}>
-          {/* <p style={{ padding: "0px 10px" }}>
-            Программа {idx + 1}: {item.count} труб
-          </p>
-          <p style={{ padding: "0px 10px" }}>Размер: {item.value}</p> */}
-          <p className="display_program_pipe_cutting_text_title">
-            Программа {idx + 1}: {item.count} труб
-          </p>
-          <p className="display_program_pipe_cutting_text_value"> {item.value}</p>
-        </div>
-      ))}
-      </div>
-
       {rows.map((row, idx) => (
         <SeparateCalculation
           key={idx}
