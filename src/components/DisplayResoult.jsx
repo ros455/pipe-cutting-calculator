@@ -1,20 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 const DisplayResoult = ({programmResoult, combinationResoult}) => {
-  // const [combinationState, setCombinationState] = useState([]);
-  // const [allCalculatePipeState, setAllCalculatePipeState] = useState([]);
-
-  // useEffect(() => {
-  //   const combinations = window.localStorage.getItem('combinations');
-  //   const allCalculatePipe = window.localStorage.getItem('allCalculatePipe');
-  //   if (combinations && allCalculatePipe) {
-  //     const parsedCombinations = JSON.parse(combinations);
-  //     const parsedAllCalculatePipe = JSON.parse(allCalculatePipe);
-  //     setCombinationState(parsedCombinations);
-  //     setAllCalculatePipeState(parsedAllCalculatePipe);
-  //   }
-  // }, [programmResoult, combinationResoult]);
-
     return (
         <div>
         {!!combinationResoult.length && combinationResoult.map((combination, idx) => (

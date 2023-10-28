@@ -26,8 +26,6 @@ const MainPage = () => {
         setCombinationResoult(combinations);
         setProgrammResoult(allCalculatePipeArray);
         window.localStorage.setItem('rows', JSON.stringify(rows));
-        // window.localStorage.setItem('combinations', JSON.stringify(combinations));
-        // window.localStorage.setItem('allCalculatePipe', JSON.stringify(allCalculatePipeArray));
       }
 
   useEffect(() => {
